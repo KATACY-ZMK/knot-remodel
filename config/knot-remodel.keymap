@@ -94,47 +94,56 @@
 
 / {
   keymap {
-    compatible = "zmk,keymap";
-    default_layer {
-      bindings = <
-        &mkp MB1 &mo 1
-        &mkp MB3 &mkp MB2
-      >;
-    };
+        compatible = "zmk,keymap";
 
-    1 {
-      bindings = <
-        &msc SCRL_UP   &trans
-        &msc SCRL_DOWN &trans
-      >;
-    };
+        default_layer {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
 
-    MOUSE {
-      bindings = <
-        &msc SCRL_UP   &trans
-        &msc SCRL_DOWN &trans
-      >;
-    };
+  layer_1 {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
 
-    SNIPE {
-      bindings = <
-        &msc SCRL_UP   &trans
-        &msc SCRL_DOWN &trans
-      >;
-    };
+        MOUSE {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
 
-    SCROLL_WARP {
-      bindings = <
-        &msc SCRL_UP   &trans
-        &msc SCRL_DOWN &trans
-      >;
-    };
+        SNIPE {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
 
-    SCROLL_SNIPE {
-      bindings = <
-        &msc SCRL_UP   &trans
-        &msc SCRL_DOWN &trans
-      >;
-    };
+
+        SCROLL {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
+
+        SCROLL_WARP {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
+
+        SCROLL_SNIPE {
+            bindings = <
+             &mkp MB1 &mo 1
+             &mkp MB3 &mkp MB2
+            >;
+        };
   };
 };
