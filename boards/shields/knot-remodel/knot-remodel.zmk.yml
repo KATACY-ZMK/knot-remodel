@@ -1,0 +1,8 @@
+file_format: "1"
+id: knot-remodel
+name: knot-remodel
+type: shield
+url: https://github.com/KATACY-ZMK/knot-remodel
+requires: [seeeduino_xiao_ble]
+features:
+  - keys

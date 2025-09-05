@@ -1,0 +1,6 @@
+if SHIELD_KNOT-REMODEL
+
+    config ZMK_KEYBOARD_NAME
+        default "knot-remodel"
+        
+endif
