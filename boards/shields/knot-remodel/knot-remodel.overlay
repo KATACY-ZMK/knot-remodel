@@ -43,3 +43,8 @@
         automouse-layer = <2>;
     };
 };
+
+&trackball_listener {
+    status = "okay";
+    device = <&trackball>;
+};
