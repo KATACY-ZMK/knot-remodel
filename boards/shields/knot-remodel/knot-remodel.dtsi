@@ -1,6 +1,7 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/zmk/input_transform.h> // <<< この一行を追加！
 #include <physical_layouts.dtsi>
-#include <input/processors.dtsi> // トラックボールの動作設定に必要
+#include <input/processors.dtsi>
 
 / {
     chosen {
