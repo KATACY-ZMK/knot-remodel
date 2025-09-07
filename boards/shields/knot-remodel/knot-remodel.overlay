@@ -1,50 +1,60 @@
-#include "knot-remodel.dtsi"
+// 以前作成した .dtsi ファイルを読み込みます
+#include "my_keyboard.dtsi"
 
-&pinctrl {
-    spi0_default: spi0_default {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                  , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                  , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                  ;
+/ {
+    chosen {
+        // この .overlay でトラックボールを有効化することをZMKに伝えます
+        zmk,pointing-device = <&trackball>;
+    };
+
+    // あなたのピン設定は、あなたのハードウェアに合わせてあるので、完全に維持します
+    &pinctrl {
+        spi0_default: spi0_default {
+            group1 {
+                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
+                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
+                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
+                      ;
+            };
+        };
+        spi0_sleep: spi0_sleep {
+            group1 {
+                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
+                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
+                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
+                      ;
+                low-power-enable;
+            };
         };
     };
 
-    spi0_sleep: spi0_sleep {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                  , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                  , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                  ;
-            low-power-enable;
-        };
-    };
-};
-
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-
-&spi0 {
-    status = "okay";
-    compatible = "nordic,nrf-spim";
-    pinctrl-0 = <&spi0_default>;
-    pinctrl-1 = <&spi0_sleep>;
-    pinctrl-names = "default", "sleep";
-    cs-gpios = <&xiao_d 6 GPIO_ACTIVE_LOW>; //NCS
-
-    trackball: trackball@0 {
+    // あなたのSPIバスとセンサーのハードウェア定義を維持します
+    &spi0 {
         status = "okay";
-        compatible = "pixart,pmw3610";
-        reg = <0>;
-        spi-max-frequency = <2000000>;
-        irq-gpios = <&xiao_d 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; //MOT
+        compatible = "nordic,nrf-spim";
+        pinctrl-0 = <&spi0_default>;
+        pinctrl-1 = <&spi0_sleep>;
+        pinctrl-names = "default", "sleep";
+        cs-gpios = <&xiao_d 6 GPIO_ACTIVE_LOW>; // あなたのNCSピン設定
 
-        snipe-layers = <3>;
-        scroll-layers = <4 5 6>;
-        automouse-layer = <2>;
+        // センサーの定義
+        trackball: trackball@0 {
+            compatible = "pixart,pmw3610";
+            reg = <0>;
+            status = "okay";
+            spi-max-frequency = <2000000>;
+            irq-gpios = <&xiao_d 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // あなたのMOTピン設定
+
+            // 以下の inorichi ドライバ専用の設定は不要なため削除しました。
+            // これらの機能は、次の .keymap ファイルで behaviors を使って実現します。
+            // snipe-layers = <3>;
+            // scroll-layers = <4 5 6>;
+            // automouse-layer = <2>;
+        };
     };
-};
 
-&trackball_listener {
-    status = "okay";
-    device = <&trackball>;
+    // .dtsi ファイルで定義したトラックボールの基本機能を有効化します
+    &trackball_listener {
+        status = "okay";
+    };
 };
