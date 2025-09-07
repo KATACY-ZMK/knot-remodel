@@ -3,77 +3,24 @@
 #include <dt-bindings/zmk/pointing.h>
 
 / {
-    // ===================================================
-    // 1. 新しい「キーの振る舞い」をここで定義します
-    //    レイヤーを使わずにモードを切り替えるための「魔法」です
-    // ===================================================
+    // behaviors ブロックは、必ず .keymap ファイルのここに書きます
     behaviors {
-        // 「押している間だけスナイプモードになる」振る舞いを
-        // "&snipe_mode" という名前で作成
         snipe_mode: behavior_snipe {
             compatible = "zmk,behavior-sensor-mode";
             mode = "snipe";
         };
-
-        // 「押している間だけ通常スクロールになる」振るる舞いを
-        // "&scroll_mode" という名前で作成
         scroll_mode: behavior_scroll {
             compatible = "zmk,behavior-sensor-mode";
             mode = "scroll";
         };
-
-        // 「押している間だけ高速スクロールになる」振る舞いを
-        // "&scroll_warp_mode" という名前で作成
-        scroll_warp_mode: behavior_scroll_warp {
-            compatible = "zmk,behavior-sensor-mode";
-            mode = "scroll_warp";
-        };
-
-        // 「押している間だけ低速スクロールになる」振る舞いを
-        // "&scroll_snipe_mode" という名前で作成
-        scroll_snipe_mode: behavior_scroll_snipe {
-            compatible = "zmk,behavior-sensor-mode";
-            mode = "scroll_snipe";
-        };
-
-        rot_kp: sensor_rotate_kp {
-            compatible = "zmk,behavior-sensor-rotate-var";
-            #sensor-binding-cells = <2>;
-            bindings = <&kp>, <&kp>;
-        };
-
-        mouse_scrl: mouse_wheel_scrl {
-            compatible = "zmk,behavior-sensor-rotate-var";
-            #sensor-binding-cells = <2>;
-            bindings = <&msc>, <&msc>;
-
-            tap-ms = <10>;
-        };
     };
 
-    // ===================================================
-    // 2. 作成した振る舞いをキーに割り当てます
-    // ===================================================
     keymap {
         compatible = "zmk,keymap";
-
-        // レイヤー0: 基本の操作
         default_layer {
-            // あなたのキーボード(4キー)に合わせてキーを割り当てます
-            // 例: 左クリック、右クリック、通常スクロール、レイヤー1へのアクセスキー
             bindings = <
-                &mkp MB1                &mkp MB2
-                &scroll_mode            &mo 1 
-            >;
-        };
-
-        // レイヤー1: 応用的な操作
-        // default_layerで &mo 1 キーを押している間だけ、
-        // このレイヤーのキーが有効になります。
-        layer_1 {
-            bindings = <
-                &trans                  &trans
-                &snipe_mode             &trans 
+                &mkp MB1          &mkp MB2
+                &scroll_mode      &snipe_mode
             >;
         };
     };

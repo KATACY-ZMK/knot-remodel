@@ -1,28 +1,21 @@
-// 以前作成した .dtsi ファイルを読み込みます
 #include "knot-remodel.dtsi"
 
 / {
     chosen {
-        // この .overlay でトラックボールを有効化することをZMKに伝えます
         zmk,pointing-device = <&trackball>;
+        zmk,pointing-sensor = <&trackball>;
     };
 
     // あなたのピン設定は、あなたのハードウェアに合わせてあるので、完全に維持します
     &pinctrl {
         spi0_default: spi0_default {
             group1 {
-                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                      ;
+                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,<NRF_PSEL(SPIM_MOSI, 0, 4)>,<NRF_PSEL(SPIM_MISO, 0, 4)>;
             };
         };
         spi0_sleep: spi0_sleep {
             group1 {
-                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                      ;
+                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,<NRF_PSEL(SPIM_MOSI, 0, 4)>,<NRF_PSEL(SPIM_MISO, 0, 4)>;
                 low-power-enable;
             };
         };
@@ -35,21 +28,15 @@
         pinctrl-0 = <&spi0_default>;
         pinctrl-1 = <&spi0_sleep>;
         pinctrl-names = "default", "sleep";
-        cs-gpios = <&xiao_d 6 GPIO_ACTIVE_LOW>; // あなたのNCSピン設定
+        cs-gpios = <&xiao_d 6 GPIO_ACTIVE_LOW>;
 
-        // センサーの定義
         trackball: trackball@0 {
             compatible = "pixart,pmw3610";
             reg = <0>;
             status = "okay";
             spi-max-frequency = <2000000>;
-            irq-gpios = <&xiao_d 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // あなたのMOTピン設定
-
-            // 以下の inorichi ドライバ専用の設定は不要なため削除しました。
-            // これらの機能は、次の .keymap ファイルで behaviors を使って実現します。
-            // snipe-layers = <3>;
-            // scroll-layers = <4 5 6>;
-            // automouse-layer = <2>;
+            irq-gpios = <&xiao_d 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+            cpi = <400>;
         };
     };
 
