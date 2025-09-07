@@ -4,7 +4,7 @@
     chosen {
         zmk,pointing-device = <&trackball>;
         zmk,pointing-sensor = <&trackball>;
-    };
+    }; // <--- このセミコロン';'を追加しただけです！
 
     // あなたのピン設定は、あなたのハードウェアに合わせてあるので、完全に維持します
     &pinctrl {
