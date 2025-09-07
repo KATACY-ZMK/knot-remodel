@@ -1,5 +1,5 @@
 // 以前作成した .dtsi ファイルを読み込みます
-#include "my_keyboard.dtsi"
+#include "knot-remodel.dtsi"
 
 / {
     chosen {
