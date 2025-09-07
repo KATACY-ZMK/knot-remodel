@@ -1,58 +1,49 @@
-#include "my_keyboard.dtsi"
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <physical_layouts.dtsi>
+#include <input/processors.dtsi> // トラックボールの動作設定に必要
 
 / {
     chosen {
-        // この .overlay でトラックボールを有効化することをZMKに伝えます
-        zmk,pointing-device = <&trackball>;
+        zmk,kscan = &kscan0;
+        zmk,matrix_transform = &default_transform;
+        // zmk,pointing-device の指定は .overlay ファイルで行います
     };
 
-    // あなたのピン設定は、あなたのハードウェアに合わせてあるので、完全に維持します
-    &pinctrl {
-        spi0_default: spi0_default {
-            group1 {
-                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                      ;
-            };
-        };
-        spi0_sleep: spi0_sleep {
-            group1 {
-                psels = <NRF_PSEL(SPIM_SCK, 0, 5)>   // SCLK
-                      , <NRF_PSEL(SPIM_MOSI, 0, 4)>  // SDIO
-                      , <NRF_PSEL(SPIM_MISO, 0, 4)>  // SDIO
-                      ;
-                low-power-enable;
-            };
-        };
+    // あなたのキー設定をそのまま維持します
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+        input-gpios
+            = <&xiao_d 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&xiao_d 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&xiao_d 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&xiao_d 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
     };
 
-    // あなたのSPIバスとセンサーのハードウェア定義を維持します
-    &spi0 {
-        status = "okay";
-        compatible = "nordic,nrf-spim";
-        pinctrl-0 = <&spi0_default>;
-        pinctrl-1 = <&spi0_sleep>;
-        pinctrl-names = "default", "sleep";
-        cs-gpios = <&xiao_d 6 GPIO_ACTIVE_LOW>; // あなたのNCSピン設定
-
-        // センサーの定義
-        trackball: trackball@0 {
-            compatible = "pixart,pmw3610";
-            reg = <0>;
-            status = "okay";
-            spi-max-frequency = <2000000>;
-            irq-gpios = <&xiao_d 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // あなたのMOTピン設定
-
-            // ===================================================
-            // ここにCPI設定を追加しました
-            // ===================================================
-            cpi = <400>; // デフォルトのCPIを400に設定します
-        };
+    // あなたのキー設定をそのまま維持します
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        rows = <2>;
+        columns = <2>;
+        map = <
+            RC(0,3) RC(0,2)
+            RC(0,1) RC(0,0)
+        >;
     };
 
-    // .dtsi ファイルで定義したトラックボールの基本機能を有効化します
-    &trackball_listener {
-        status = "okay";
+    // トラックボール機能の「骨格」だけを定義します
+    trackball_listener: trackball_listener {
+        compatible = "zmk,input-listener";
+        // &trackball という名前のデバイスを監視します
+        // (デバイス自体は、後で .overlay ファイルで定義します)
+        device = <&trackball>;
+        
+        // デフォルトでは無効にしておき、.overlay ファイルで有効化します
+        status = "disabled";
+
+        // センサーの物理的な向きに合わせた軸の入れ替えなど、
+        // 基本的な設定はここに書いておくのが一般的です
+        input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
     };
 };
